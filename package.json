@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "name": "matrix-homeserver",
+  "version": "1.0.0",
+  "description": "Matrix media server with local sticker-repo storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=26.0.0"
+  },
+  "keywords": [
+    "matrix",
+    "media",
+    "server"
+  ],
+  "author": ""
+}
