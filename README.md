@@ -4,9 +4,8 @@ This service lets you self-host the [sticker-repo](https://sticker-repo.github.i
 
 ## Prerequisites
 
-- Docker and Docker Compose (or Docker installed)
-- A Matrix homeserver running at a base domain (e.g., `example.com`)
-- A subdomain available for sticker-repo (e.g., `sticker-repo.example.com`)
+- Docker
+- A subdomain (e.g., `sticker-repo.example.com`)
 - A reverse proxy (Nginx, Caddy, etc.) configured for your domain
 
 ## Quick Start
