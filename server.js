@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STICKER_REPO_DIR = path.join(__dirname, "sticker-repo");
+const PUBLIC_DIR = path.join(__dirname, "public");
 const PORT = 80;
 
 function json(obj, status = 200) {
@@ -17,6 +18,48 @@ function json(obj, status = 200) {
     },
     body,
   };
+}
+
+function getMimeType(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeTypes = {
+    ".html": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".ico": "image/x-icon",
+    ".woff": "font/woff",
+    ".woff2": "font/woff2",
+    ".ttf": "font/ttf",
+    ".eot": "application/vnd.ms-fontobject",
+    ".pdf": "application/pdf",
+  };
+  return mimeTypes[ext] || "application/octet-stream";
+}
+
+async function serveStaticFile(filePath) {
+  try {
+    const bytes = await fs.readFile(filePath);
+    const contentType = getMimeType(filePath);
+    
+    return {
+      status: 200,
+      headers: {
+        "content-type": contentType,
+        "content-length": String(bytes.length),
+        "cache-control": "public, max-age=3600",
+      },
+      body: bytes,
+    };
+  } catch (error) {
+    return null;
+  }
 }
 
 async function getFileBytes(mediaId) {
@@ -167,11 +210,36 @@ const server = http.createServer(async (req, res) => {
             const file = await getFileBytes(mediaId);
             response = rawMediaResponse(file);
           } else {
-            response = {
-              status: 404,
-              headers: { "content-type": "text/plain" },
-              body: "Not found",
-            };
+            // Try to serve static file
+            let staticFilePath = path.join(PUBLIC_DIR, pathname);
+            
+            // If pathname is just "/", serve index.html
+            if (pathname === "/") {
+              staticFilePath = path.join(PUBLIC_DIR, "index.html");
+            }
+            
+            // Security: ensure the resolved path is within PUBLIC_DIR
+            const absolutePublicDir = path.resolve(PUBLIC_DIR);
+            const resolvedPath = path.resolve(staticFilePath);
+            
+            if (!resolvedPath.startsWith(absolutePublicDir)) {
+              response = {
+                status: 403,
+                headers: { "content-type": "text/plain" },
+                body: "Access denied",
+              };
+            } else {
+              const staticResponse = await serveStaticFile(resolvedPath);
+              if (staticResponse) {
+                response = staticResponse;
+              } else {
+                response = {
+                  status: 404,
+                  headers: { "content-type": "text/plain" },
+                  body: "Not found",
+                };
+              }
+            }
           }
         }
       }
@@ -190,6 +258,6 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
