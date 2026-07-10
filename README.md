@@ -1,6 +1,6 @@
 # Sticker-Repo for Local Matrix Homeservers
 
-This service lets you self-host the sticker-repo repository. On first startup, it clones all sticker packs, then mimics the Matrix homeserver federation API to serve them to your homeserver as needed.
+This service lets you self-host the [sticker-repo](sticker-repo.github.io) repository. On first startup, it clones all sticker packs, then mimics the Matrix homeserver federation API to serve them to your homeserver as needed.
 
 ## Prerequisites
 
