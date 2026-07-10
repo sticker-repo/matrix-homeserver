@@ -14,5 +14,8 @@ RUN mkdir -p /etc/crontabs
 COPY crontab /etc/crontabs/root
 RUN chmod 0644 /etc/crontabs/root
 
+# automatic extract
+ADD https://github.com/sticker-repo/sticker-repo.github.io/archive/refs/heads/gh-pages.zip /app/public
+
 EXPOSE 80
 CMD ["/run.sh"]
