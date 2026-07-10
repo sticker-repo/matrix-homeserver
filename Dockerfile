@@ -15,7 +15,7 @@ COPY crontab /etc/crontabs/root
 RUN chmod 0644 /etc/crontabs/root
 
 # automatic extract
-ADD --unpack=true https://github.com/sticker-repo/sticker-repo.github.io/archive/refs/heads/gh-pages.tar.gz /app/public
+ADD --unpack=true --keep-git-dir=false https://github.com/sticker-repo/sticker-repo.github.io.git#gh-pages /app/public
 
 EXPOSE 80
 CMD ["/run.sh"]
