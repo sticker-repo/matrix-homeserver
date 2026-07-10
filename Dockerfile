@@ -16,6 +16,7 @@ RUN chmod 0644 /etc/crontabs/root
 
 # automatic extract
 ADD --unpack=true --keep-git-dir=false https://github.com/sticker-repo/sticker-repo.github.io.git#gh-pages /app/public
+RUN ln -s /app/sticker-repo/s1 /app/public/s1
 
 EXPOSE 80
 CMD ["/run.sh"]
