@@ -1,7 +1,6 @@
 # Sticker-Repo for Local Matrix Homeservers
 
-A local caching sticker-repo repository proxy for Matrix homeservers.
-This service allows you to self-host the sticker-repo repository.
+This service lets you self-host the sticker-repo repository. On first startup, it clones all sticker packs, then mimics the Matrix homeserver federation API to serve them to your homeserver as needed.
 
 ## Prerequisites
 
