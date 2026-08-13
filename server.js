@@ -213,8 +213,8 @@ const server = http.createServer(async (req, res) => {
             // Try to serve static file
             let staticFilePath = path.join(PUBLIC_DIR, pathname);
             
-            // If pathname is just "/", serve index.html
-            if (pathname === "/") {
+            // Serve index.html (based on sticker-repo.github.io's src/router/index.js)
+            if ((pathname === "/") || pathname.startsWith("/pack") || pathname.startsWith("/search")) {
               staticFilePath = path.join(PUBLIC_DIR, "index.html");
             }
             
